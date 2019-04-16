@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="weather" translatesAutoresizingMaskIntoConstraints="NO" id="Wz7-Fb-pbk">
+                                <rect key="frame" x="-5" y="215.5" width="385" height="256"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Wz7-Fb-pbk" secondAttribute="height" multiplier="480:319" id="U6W-N9-UVM"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weather Service Guranted" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1GK-ah-DTk">
+                                <rect key="frame" x="10" y="245.5" width="355" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In every WEATHER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff1-s4-5tI">
+                                <rect key="frame" x="116" y="271.5" width="143" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.40711995959281921" green="0.7091706395149231" blue="0.89022189378738403" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="Wz7-Fb-pbk" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="44C-u6-oUf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Wz7-Fb-pbk" secondAttribute="leading" constant="5" id="4gl-Wl-eQf"/>
+                            <constraint firstItem="Wz7-Fb-pbk" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Kdm-1Z-HId"/>
+                            <constraint firstItem="Ff1-s4-5tI" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="PPx-0d-2NG"/>
+                            <constraint firstItem="Wz7-Fb-pbk" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="5" id="iJt-TD-cJV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1GK-ah-DTk" secondAttribute="trailing" constant="10" id="kbJ-CK-1Fv"/>
+                            <constraint firstItem="1GK-ah-DTk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="m1V-IJ-NUh"/>
+                            <constraint firstItem="Ff1-s4-5tI" firstAttribute="top" secondItem="1GK-ah-DTk" secondAttribute="bottom" constant="5" id="oYB-pm-hyE"/>
+                            <constraint firstItem="Wz7-Fb-pbk" firstAttribute="top" secondItem="1GK-ah-DTk" secondAttribute="top" constant="-30" id="oba-rS-7re"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="weather" width="480" height="319.5"/>
+    </resources>
+</document>
