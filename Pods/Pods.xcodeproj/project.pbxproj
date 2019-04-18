@@ -150,6 +150,7 @@
 		F18C59397E06DACEB3AFBB6AC6C841DC /* ChartDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917D2C49376D99C5D9A09143FD19DD0F /* ChartDataProvider.swift */; };
 		F2A2447F8DB919A637E0A6CDA93105DD /* Pods-Weather-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F09683F2948BDA62A50C19FAA182393B /* Pods-Weather-dummy.m */; };
 		F4F127505341FD6158158F8FEA9AFB49 /* CandleChartDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB3A5C31E44BDD6003612E8F21B5BFB /* CandleChartDataSet.swift */; };
+		F5F535E4226872510082CDCB /* DayAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F535E3226872510082CDCB /* DayAxisValueFormatter.swift */; };
 		F886AF90C12BEEB8AC7780AC12B2F6E2 /* AnimatedZoomViewJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4747653A6B8ABE157C1AC84EAC6EA00 /* AnimatedZoomViewJob.swift */; };
 		FB112A02BCC0AF42A96C6AA172A31B94 /* PieChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E190AC6EFCFC6461E2900C4271A50C77 /* PieChartData.swift */; };
 		FCBDEE9979D365769A3555267D895428 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBF978E947F6F4E800D19DF6D6EA989 /* BarChartView.swift */; };
@@ -213,7 +214,7 @@
 		1A24375D2F7CA16C18C0767290DD6434 /* ChartColorTemplates.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartColorTemplates.swift; path = Source/Charts/Utils/ChartColorTemplates.swift; sourceTree = "<group>"; };
 		1F5CBF084ACD9B182CFBB9DBB44FB65B /* ChartDataEntryBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartDataEntryBase.swift; path = Source/Charts/Data/Implementations/Standard/ChartDataEntryBase.swift; sourceTree = "<group>"; };
 		20210D224707647A4673B0D672B1586B /* Renderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Renderer.swift; path = Source/Charts/Renderers/Renderer.swift; sourceTree = "<group>"; };
-		2028F9CE043A8FB7DC80A77EFA5CFA1C /* Pods_WeatherUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_WeatherUITests.framework; path = "Pods-WeatherUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2028F9CE043A8FB7DC80A77EFA5CFA1C /* Pods_WeatherUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2373AB2D70B23DE8C971302A081D46B6 /* Highlight.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Highlight.swift; path = Source/Charts/Highlight/Highlight.swift; sourceTree = "<group>"; };
 		238FF5D8C0D4BBE60FC0329A5717477D /* CombinedChartView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CombinedChartView.swift; path = Source/Charts/Charts/CombinedChartView.swift; sourceTree = "<group>"; };
 		26D9CF07D8BDAE02F5BD185FAAF3A529 /* BarChartData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BarChartData.swift; path = Source/Charts/Data/Implementations/Standard/BarChartData.swift; sourceTree = "<group>"; };
@@ -261,7 +262,7 @@
 		5C05332757495BD1E515DC19316A23AE /* HorizontalBarChartView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HorizontalBarChartView.swift; path = Source/Charts/Charts/HorizontalBarChartView.swift; sourceTree = "<group>"; };
 		5CAE27520722689FACFD311A7FD6C892 /* CandleStickChartView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CandleStickChartView.swift; path = Source/Charts/Charts/CandleStickChartView.swift; sourceTree = "<group>"; };
 		5DC1DD21D57F20D7EA896AB5498B87AE /* PieHighlighter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieHighlighter.swift; path = Source/Charts/Highlight/PieHighlighter.swift; sourceTree = "<group>"; };
-		5E16B57B0EDA9510B8D393DD9FF9EC4F /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Charts.framework; path = Charts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E16B57B0EDA9510B8D393DD9FF9EC4F /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Charts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB60701C8E7AE088A202D4CFBE42DBE /* ILineRadarChartDataSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ILineRadarChartDataSet.swift; path = Source/Charts/Data/Interfaces/ILineRadarChartDataSet.swift; sourceTree = "<group>"; };
 		5F7C09151AB1E783BEF4381E67065C37 /* PieChartRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieChartRenderer.swift; path = Source/Charts/Renderers/PieChartRenderer.swift; sourceTree = "<group>"; };
 		60BF0B554CE78AE03190E1C69FC45749 /* Pods-WeatherTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-WeatherTests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -283,7 +284,7 @@
 		82D65756E641F955C160C1036B14CA04 /* Pods-Weather-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Weather-acknowledgements.markdown"; sourceTree = "<group>"; };
 		82F0307E23729D93C583C5A99F021BAF /* YAxisRendererRadarChart.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = YAxisRendererRadarChart.swift; path = Source/Charts/Renderers/YAxisRendererRadarChart.swift; sourceTree = "<group>"; };
 		843AF3BFB9C36DCCC0F704AF86C2F47D /* Charts-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Charts-dummy.m"; sourceTree = "<group>"; };
-		897F9AC072BF0678117B08E19EDAD6D8 /* Pods_WeatherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_WeatherTests.framework; path = "Pods-WeatherTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		897F9AC072BF0678117B08E19EDAD6D8 /* Pods_WeatherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BA89C845B623EC63CCA021D35326C5E /* PieChartDataEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieChartDataEntry.swift; path = Source/Charts/Data/Implementations/Standard/PieChartDataEntry.swift; sourceTree = "<group>"; };
 		8C0B503FC54B08FF58B91AB8B1B18E74 /* ScatterChartRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScatterChartRenderer.swift; path = Source/Charts/Renderers/ScatterChartRenderer.swift; sourceTree = "<group>"; };
 		8D50025549CA4567284BB2D6BB457844 /* CandleChartDataEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CandleChartDataEntry.swift; path = Source/Charts/Data/Implementations/Standard/CandleChartDataEntry.swift; sourceTree = "<group>"; };
@@ -295,7 +296,7 @@
 		98EEECCB2836323F89EE9589497F626E /* IScatterChartDataSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IScatterChartDataSet.swift; path = Source/Charts/Data/Interfaces/IScatterChartDataSet.swift; sourceTree = "<group>"; };
 		9AD2A35E57D87D7E37912E636CFE12E6 /* XAxisRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = XAxisRenderer.swift; path = Source/Charts/Renderers/XAxisRenderer.swift; sourceTree = "<group>"; };
 		9D5854DDA2A25C8407422D08FFA02B02 /* IndexAxisValueFormatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IndexAxisValueFormatter.swift; path = Source/Charts/Formatters/IndexAxisValueFormatter.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9FD9B018CCDEDD7F72B18A68B98673A0 /* CombinedHighlighter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CombinedHighlighter.swift; path = Source/Charts/Highlight/CombinedHighlighter.swift; sourceTree = "<group>"; };
 		9FE1194747DCC58418FA3724E128084D /* Pods-WeatherTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-WeatherTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		A2CB3AD0D90D4C07398BFDB340EBA2CA /* RadarChartView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RadarChartView.swift; path = Source/Charts/Charts/RadarChartView.swift; sourceTree = "<group>"; };
@@ -315,7 +316,7 @@
 		B1A8791D83AC6C1939076E4ABB8702B2 /* Pods-WeatherTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-WeatherTests-umbrella.h"; sourceTree = "<group>"; };
 		B330A84D087815129176E2800ABC96E1 /* RadarChartDataSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RadarChartDataSet.swift; path = Source/Charts/Data/Implementations/Standard/RadarChartDataSet.swift; sourceTree = "<group>"; };
 		B4CA59B81DDB96882FA7975CF0B062DE /* IChartDataSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IChartDataSet.swift; path = Source/Charts/Data/Interfaces/IChartDataSet.swift; sourceTree = "<group>"; };
-		B57FB8EA8C2D6110474A4CDF94D55341 /* Pods_Weather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Weather.framework; path = "Pods-Weather.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B57FB8EA8C2D6110474A4CDF94D55341 /* Pods_Weather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Weather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5967BF5757F6505A33C4E71A4F3B7B2 /* ChartData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartData.swift; path = Source/Charts/Data/Implementations/Standard/ChartData.swift; sourceTree = "<group>"; };
 		B7D86B7CC9E9A143C5EB5C53AD576E29 /* LineScatterCandleRadarRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LineScatterCandleRadarRenderer.swift; path = Source/Charts/Renderers/LineScatterCandleRadarRenderer.swift; sourceTree = "<group>"; };
 		BC3F39C6E465F6D4CBDB9A4A866608A6 /* DataApproximator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataApproximator.swift; path = Source/Charts/Filters/DataApproximator.swift; sourceTree = "<group>"; };
@@ -345,6 +346,7 @@
 		F31AB2225CF2ED107A65A16AFB3ECDD0 /* BubbleChartData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BubbleChartData.swift; path = Source/Charts/Data/Implementations/Standard/BubbleChartData.swift; sourceTree = "<group>"; };
 		F35E2E258CBF01B2F17BB21F73C5C6EB /* Platform+Accessibility.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Platform+Accessibility.swift"; path = "Source/Charts/Utils/Platform+Accessibility.swift"; sourceTree = "<group>"; };
 		F57B3F869A38142F748FCF3036C5C6E9 /* Pods-Weather-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Weather-acknowledgements.plist"; sourceTree = "<group>"; };
+		F5F535E3226872510082CDCB /* DayAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DayAxisValueFormatter.swift; path = ../../Weather/DayAxisValueFormatter.swift; sourceTree = "<group>"; };
 		F62AC4C9CFEFABE3D7ADF4CB710FF550 /* Fill.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Fill.swift; path = Source/Charts/Utils/Fill.swift; sourceTree = "<group>"; };
 		F65166287252E17D87515104C88B9C75 /* XShapeRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = XShapeRenderer.swift; path = Source/Charts/Renderers/Scatter/XShapeRenderer.swift; sourceTree = "<group>"; };
 		F6572CADADE87F1BC5F432E3F7454BE8 /* Pods-WeatherUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-WeatherUITests-umbrella.h"; sourceTree = "<group>"; };
@@ -480,7 +482,6 @@
 				DAB4FA5871A2FDE9EB9C10AF1515CCB5 /* Core */,
 				74CB780F417389D696AFA979AC862FFD /* Support Files */,
 			);
-			name = Charts;
 			path = Charts;
 			sourceTree = "<group>";
 		};
@@ -653,6 +654,7 @@
 				10398933961046F2AC02AB2F1720EF16 /* YAxisRendererHorizontalBarChart.swift */,
 				82F0307E23729D93C583C5A99F021BAF /* YAxisRendererRadarChart.swift */,
 				3CE4DC5424EDC12E911324B4DAFE96F5 /* ZoomViewJob.swift */,
+				F5F535E3226872510082CDCB /* DayAxisValueFormatter.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -969,6 +971,7 @@
 				3BE672BC71350E220A0F4B5519441817 /* Renderer.swift in Sources */,
 				B80C5D473B7DB17D73F8064261CF5030 /* ScatterChartData.swift in Sources */,
 				D8A8C31B1400FDCB87227F29514BD24F /* ScatterChartDataProvider.swift in Sources */,
+				F5F535E4226872510082CDCB /* DayAxisValueFormatter.swift in Sources */,
 				E8EBA4F71F21DAFA5CA3F93A9ACE6255 /* ScatterChartDataSet.swift in Sources */,
 				8ECA4E39B43581A39C7BF55413E06F1C /* ScatterChartRenderer.swift in Sources */,
 				C688C83E967F7A175B4C8652861B83C5 /* ScatterChartView.swift in Sources */,
