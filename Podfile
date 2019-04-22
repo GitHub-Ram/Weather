@@ -7,6 +7,7 @@ target 'Weather' do
 
   # Pods for Weather
 pod 'Charts','~>3.3'
+pod 'ReachabilitySwift','~>4.3.1'
   target 'WeatherTests' do
     inherit! :search_paths
     # Pods for testing
