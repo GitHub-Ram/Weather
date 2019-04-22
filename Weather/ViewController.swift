@@ -12,35 +12,70 @@ import Charts
 import CoreLocation
 
 class ViewController: UIViewController,SearchViewControllerDelegate {
-    
+   
+    @IBOutlet weak var tempRange: UILabel!
+    @IBOutlet weak var textStatus: UILabel!
+    @IBOutlet weak var typeIcon: UIImageView!
+    @IBOutlet weak var weathericon: UIImageView!
+    @IBOutlet weak var weatherSubtext1: UILabel!
+    @IBOutlet weak var weatherText: UILabel!
+    @IBOutlet weak var infoButton: UIButton!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var temperatureLabel: UILabel!
     @IBOutlet var updatedWhen: UILabel!
     @IBOutlet var cityName: UILabel!
     @IBOutlet weak var barChartView: LineChartView!
+    var searchViewController : SearchViewController!
     var delegate : NewViewControllerAdded?
     var months: [String]!
     var location : Location?
     let reachability = Reachability()!
-    var isConnection :Bool = false
     var temperature : Temperatures!
     public var locationIndex : Int!
     @IBOutlet weak var addCity: UIButton!
+    @IBOutlet weak var infoViewChild: UIView!
+    var twoMinTimer : Timer!
+    var onLaunch : Bool = false
     
-    var dataTask: URLSessionDataTask?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
-        setChart(dataPoints:months, values: unitsSold)
-        
+    @IBAction func infoButtonClicked(_ sender: Any) {
+        if Global.sharedInstance.isConnected && self.infoButton.tag == 200 {
+            self.infoView.alpha = 0
+            if Global.sharedInstance.locationList.count == 0 {
+                self.activityIndicator.startAnimating()
+                self.presentLocation()
+            }else{
+                self.location = Global.sharedInstance.locationList[self.locationIndex]
+                self.cityName.text = self.location?.city == nil ? "" : self.location?.city
+                self.temperatureCall()
+            }
+        }else if Global.sharedInstance.isConnected && self.infoButton.tag == 100 {
+            goToSearch()
+        }
+    }
+    @IBOutlet weak var infoMsg: UILabel!
+    @IBOutlet weak var infoHeader: UILabel!
+    @IBOutlet weak var infoView: UIView!
+    
+    fileprivate func showinfoMsg(msg:String,header:String,fromSearch:Bool) {
+        self.activityIndicator.stopAnimating()
+        self.infoView.alpha = 1;
+        self.infoMsg.text = msg
+        self.infoHeader.text = header//"Info"
+        if fromSearch {
+            self.infoButton.tag = 100
+        }else{
+            self.infoButton.tag = 200
+        }
+    }
+    
+    fileprivate func checkConnection() {
         reachability.whenReachable = { reachability in
             if reachability.connection == .wifi {
                 print("Reachable via WiFi")
             } else {
                 print("Reachable via Cellular")
             }
-            self.isConnection = true
+            Global.sharedInstance.isConnected = true
             if Global.sharedInstance.locationList.count == 0 {
                 self.activityIndicator.startAnimating()
                 self.presentLocation()
@@ -54,7 +89,13 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         
         reachability.whenUnreachable = { _ in
             print("Not reachable")
-            self.isConnection = false
+            Global.sharedInstance.isConnected = false
+            var fromSearch : Bool = false
+            if self.searchViewController != nil {
+                fromSearch = true
+                self.searchViewController.dismiss(animated: true, completion: nil)
+            }
+            self.showinfoMsg(msg:"You are not connected to Internet. Please try again after sometime.",header:"Info",fromSearch:fromSearch)
         }
         
         do {
@@ -62,18 +103,85 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         } catch {
             print("Unable to start notifier")
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
+        setChart(dataPoints:months, values: unitsSold)
+        checkConnection()
         if Global.sharedInstance.locationList.count != 0 && Global.sharedInstance.locationList.count >= self.locationIndex{
             self.location = Global.sharedInstance.locationList[self.locationIndex]
         }
         cityName.text = self.location?.city == nil ? "" : self.location?.city
+        
+        self.infoButton.layer.borderColor = self.infoButton.titleColor(for:UIControl.State.normal)?.cgColor
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapFunction))
+        self.temperatureLabel.addGestureRecognizer(tap)
+        self.temperatureLabel.isUserInteractionEnabled = true
+        showBack(show:1)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if !onLaunch {
+            twoMinTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
+        }
+        onLaunch = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if twoMinTimer != nil
+        {
+            twoMinTimer.invalidate()
+            twoMinTimer = nil
+        }
+        onLaunch = false
+    }
+    
+    @objc func tapFunction(sender:UITapGestureRecognizer) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.temperatureLabel.isUserInteractionEnabled = true
+        }
+        DispatchQueue.main.async  {
+            self.temperatureLabel.isUserInteractionEnabled = false
+            let radians = 90 * Double.pi / 180
+            UIView.animate(withDuration: 1, animations: {
+                self.temperatureLabel.layer.transform = CATransform3DMakeRotation(CGFloat(radians), 1, 0, 0);
+            }, completion: { (true) in
+                let y = Double(round(10*self.temperature.currently.temperature)/10 )
+                if Global.sharedInstance.unit == "F"{
+                    Global.sharedInstance.unit = "C"
+                }else{
+                    Global.sharedInstance.unit = "F"
+                }
+                let min = Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 )
+                let height = Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 )
+                self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
+                UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
+                    self.temperatureLabel.layer.transform = CATransform3DMakeRotation(0, 1, 0, 0);
+                }, completion: nil)
+            })
+        }
+    }
+    
+    @objc func timer(){
+        if Global.sharedInstance.isConnected {
+            temperatureCall()
+        }
+    }
+    
+    fileprivate func goToSearch() {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        searchViewController = (storyboard.instantiateViewController(withIdentifier: "SearchViewController") as! SearchViewController)
+        present(searchViewController, animated: true) {
+            self.searchViewController.delegate = self
+        }
     }
     
     @IBAction func touchUpInside(_ sender: Any) {
-        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as! SearchViewController
-        present(viewController, animated: true) {
-            viewController.delegate = self
-        }
+        goToSearch()
     }
     
     func searchDismissed(location: CLPlacemark) {
@@ -90,11 +198,21 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
     }
     
     fileprivate func temperatureCall() {
-        let url = URL(string: "https://api.darksky.net/forecast/53bb398c7d4971848bda0ac96a4b26bf/"+String(Double((self.location?.lat)!))+","+String(Double((self.location?.lon)!)))!
         
+        DispatchQueue.main.async  {
+            self.updatedWhen.text = "Updating.."
+        }
+        let url = URL(string: "https://api.darksky.net/forecast/53bb398c7d4971848bda0ac96a4b26bf/"+String(Double((self.location?.lat)!))+","+String(Double((self.location?.lon)!)))!
         let task = URLSession.shared.dataTask(with: url) {
             (data, response, error) in
-            guard let data = data else { return }
+            guard let data = data else {
+                DispatchQueue.main.async  {
+                    self.updatedWhen.text = "Updated failed"
+                    self.activityIndicator.stopAnimating()
+                    self.showinfoMsg(msg:"Some error acknowleged while trying request to server. Please try again after sometime.",header:"Error",fromSearch:false)
+                }
+                return
+            }
             print(String(data: data, encoding: .utf8)!)
             let currentlyObj : Currently
             let hourlyObj : Hourly
@@ -219,26 +337,67 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                 let offset : Double = jsonResult!.value(forKey: "offset") as! Double
                 self.temperature = Temperatures(latitude: latitude, longitude: longitude, timezone: timezone, currently: currentlyObj, hourly: hourlyObj, daily: dailyObj, flags: Flags(sources: [],nearestStation: 00.00,units: "nil"), offset: offset)
                 
-                DispatchQueue.main.sync  {
+                DispatchQueue.main.async  {
                     self.updatedWhen.text = "Just Updated"
-                    let y = Double(round(10*self.temperature.currently.temperature)/10)
-                    self.temperatureLabel.text = String(y)
+                    let y = Double(round(10*self.temperature.currently.temperature)/10 )
+                    self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
                     self.activityIndicator.stopAnimating()
+                    self.textStatus.text = self.temperature.currently.summary
+                    let min = Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 )
+                    let height = Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 )
+                    self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                    var templist = [Double]()
+                    for i in 0...self.temperature.daily.data.count - 1 {
+                        templist.append( self.temperature.daily.data[i].temperatureMax)
+                    }
+                    self.setChart(dataPoints:self.months, values: templist)
+                    var getIcon : Bool = false
+                    if Global.sharedInstance.icon_list.contains(self.temperature.currently.icon){
+                        self.showBack(show: 0)
+                        self.typeIcon.image = UIImage(named: self.temperature.currently.icon)
+                        getIcon = true
+                    }else{
+                        for i in 0...Global.sharedInstance.icon_list.count-1 {
+                            if Global.sharedInstance.icon_list[i].contains(self.temperature.currently.icon) {
+                                self.showBack(show: 0)
+                                self.typeIcon.image = UIImage(named: Global.sharedInstance.icon_list[i])
+                                getIcon = true
+                                break
+                            }
+                        }
+                    }
+                    if !getIcon {
+                        self.showBack(show: 1)
+                    }
                 }
             } catch let error as NSError {
+                DispatchQueue.main.async  {
+                    self.updatedWhen.text = "Updated failed"
+                    self.activityIndicator.stopAnimating()
+                    self.showinfoMsg(msg:"Some error acknowleged while trying request to server. Please try again after sometime.",header:"Error",fromSearch:false)
+                }
                 print(error.localizedDescription)
-                self.activityIndicator.stopAnimating()
             }
         }
         task.resume()
     }
     
+    
     fileprivate func presentLocation() {
+        DispatchQueue.main.async  {
+            self.updatedWhen.text = "Updating.."
+        }
         let url = URL(string: "http://ip-api.com/json")!
-        
         let task = URLSession.shared.dataTask(with: url) {
             (data, response, error) in
-            guard let data = data else { return }
+            guard let data = data else {
+                DispatchQueue.main.async  {
+                    self.updatedWhen.text = "Updated City failed"
+                    self.showinfoMsg(msg:"Some error acknowleged while trying request to server. Please try again after sometime.",header:"Error",fromSearch:false)
+                    self.activityIndicator.stopAnimating()
+                }
+                
+                return }
             do {
                 if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     if let lat = jsonResult.value(forKey: "lat") as? Double {
@@ -246,7 +405,8 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                             let city = jsonResult.value(forKey: "city") as! String
                             self.location = Location(lat: lat,lon: lon,city:city)
                             Global.sharedInstance.locationList.append(self.location!)
-                            DispatchQueue.main.sync  {
+                            DispatchQueue.main.async  {
+                                self.updatedWhen.text = "Updated City"
                                  self.cityName.text = self.location?.city == nil ? "" : self.location?.city
                             }
                             self.temperatureCall()
@@ -255,7 +415,11 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
-                self.activityIndicator.stopAnimating()
+                DispatchQueue.main.async  {
+                    self.updatedWhen.text = "Updated City failed"
+                    self.showinfoMsg(msg:"Some error acknowleged while trying request to server. Please try again after sometime.",header:"Error",fromSearch:false)
+                    self.activityIndicator.stopAnimating()
+                }
             }
         }
         task.resume()
@@ -264,17 +428,30 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
     func setChart(dataPoints: [String], values: [Double]) {
         var dataEntries: [ChartDataEntry] = []
         
-        for i in 0..<dataPoints.count {
+        for i in 0..<values.count {
             let dataEntry = ChartDataEntry(x: Double(i), y:values[i],data:dataPoints[i])
             dataEntries.append(dataEntry)
         }
         let chartDataSet = LineChartDataSet(entries: dataEntries, label: "Temperature Variation")
         let chartData = LineChartData(dataSet: chartDataSet)
         barChartView.data = chartData
+        barChartView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         self.delegate = nil
+    }
+    
+    private func showBack(show:CGFloat){
+        self.weatherText.alpha = show
+        self.weatherSubtext1.alpha = show
+        self.weathericon.alpha = show
+        if show == 1{
+            self.typeIcon.alpha = 0
+        }
+        else{
+            self.typeIcon.alpha = 1
+        }
     }
     
 }

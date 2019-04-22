@@ -75,7 +75,17 @@ class  SearchViewController: UIViewController, UITableViewDataSource,UITableView
         if (searchText.count >= 3){
             self.activityIndicator.startAnimating()
             DispatchQueue.global(qos: .default).async {
-                self.extractedFunc(partText :searchText)
+                if Global.sharedInstance.isConnected{
+                    self.extractedFunc(partText :searchText)
+                }else{
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true) {
+                            self.delegate = nil
+                        }
+                    }
+                    
+                }
+                
             }
         }else{
             self.activityIndicator.stopAnimating()

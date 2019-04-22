@@ -12,6 +12,8 @@ import CoreLocation
 final class Global{
     static let sharedInstance = Global()
     public var locationList = [Location]()
+    public var isConnected = false
+    public var unit : String = "F"
     private init() {
         getShavedLocation()
     }
@@ -27,5 +29,6 @@ final class Global{
             
         }
     }
-    
+    public let icon_list = ["clear-day","clear-night","cloudy","partly-cloudy-day","partly-cloudy-night","rain","wind"]
+
 }
