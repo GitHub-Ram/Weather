@@ -12,6 +12,12 @@ import CoreLocation
 
 class  SearchViewController: UIViewController, UITableViewDataSource,UITableViewDelegate ,UISearchBarDelegate{
     @IBOutlet weak var searchbar: UISearchBar!
+    @IBAction func closebtnClick(_ sender: Any) {
+        dismiss(animated: true) {
+            self.delegate = nil
+        }
+    }
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var customView: UIView!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     private var placeMark = [String]()
@@ -27,7 +33,9 @@ class  SearchViewController: UIViewController, UITableViewDataSource,UITableView
         customView.clipsToBounds = true
         self.activityIndicator.stopAnimating()
         tableView.allowsSelection = true
+        self.closeButton.layer.borderColor = self.closeButton.titleColor(for:UIControl.State.normal)?.cgColor
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return placeMark.count

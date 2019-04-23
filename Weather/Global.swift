@@ -13,6 +13,7 @@ final class Global{
     static let sharedInstance = Global()
     public var locationList = [Location]()
     public var isConnected = false
+    public var pageViewController : PageViewController!
     public var unit : String = "F"
     private init() {
         getShavedLocation()

@@ -110,12 +110,17 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         //months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         //let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
         //setChart(dataPoints:months, values: unitsSold)
+        self.temperatureLabel.text = ""
+        self.temperatureLabel.text = ""
+        self.updatedWhen.text = "Updating.."
+        self.cityName.text = ""
+        self.tempRange.text = ""
+        self.textStatus.text = ""
         checkConnection()
         if Global.sharedInstance.locationList.count != 0 && Global.sharedInstance.locationList.count >= self.locationIndex{
             self.location = Global.sharedInstance.locationList[self.locationIndex]
         }
         cityName.text = self.location?.city == nil ? "" : self.location?.city
-        
         self.infoButton.layer.borderColor = self.infoButton.titleColor(for:UIControl.State.normal)?.cgColor
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapFunction))
         self.temperatureLabel.addGestureRecognizer(tap)
@@ -124,17 +129,20 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         self.temperatureLabel.layer.zPosition = 400;
         self.textStatus.textColor = UIColor.white
         self.tempRange.textColor = UIColor.white
+        
         showBack(show:1)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if !onLaunch {
+            delegate = Global.sharedInstance.pageViewController
             twoMinTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
         }
         onLaunch = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        delegate = nil
         if twoMinTimer != nil
         {
             twoMinTimer.invalidate()

@@ -14,6 +14,7 @@ class PageViewController : UIPageViewController,NewViewControllerAdded{
     var location : Location!
     override func viewDidLoad() {
         super.viewDidLoad()
+        Global.sharedInstance.pageViewController = self
         dataSource = self
         //presentLocation()
         let viewController = self.getViewController()
@@ -50,7 +51,7 @@ class PageViewController : UIPageViewController,NewViewControllerAdded{
                             DispatchQueue.main.sync  {
                                 let viewController = self.getViewController()
                                 viewController.locationIndex = 0
-                                self.setViewControllers([viewController], direction: .forward, animated: true) { (Bool) in viewController.delegate = self
+                                self.setViewControllers([viewController], direction: .forward, animated: true) { (Bool) in
                                 }
                             }
                             
@@ -66,7 +67,7 @@ class PageViewController : UIPageViewController,NewViewControllerAdded{
     func onNewLocationAdded(locationIndex: Int) {
         let viewController = getViewController()
         viewController.locationIndex = locationIndex
-        self.setViewControllers([viewController], direction: .forward, animated: true) { (Bool) in  viewController.delegate = self}
+        self.setViewControllers([viewController], direction: .forward, animated: true) { (Bool) in  }
         
     }
 }
