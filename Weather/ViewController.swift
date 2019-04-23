@@ -27,7 +27,7 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
     @IBOutlet weak var barChartView: LineChartView!
     var searchViewController : SearchViewController!
     var delegate : NewViewControllerAdded?
-    var months: [String]!
+    //var months: [String]!
     var location : Location?
     let reachability = Reachability()!
     var temperature : Temperatures!
@@ -107,9 +107,9 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
-        setChart(dataPoints:months, values: unitsSold)
+        //months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        //let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
+        //setChart(dataPoints:months, values: unitsSold)
         checkConnection()
         if Global.sharedInstance.locationList.count != 0 && Global.sharedInstance.locationList.count >= self.locationIndex{
             self.location = Global.sharedInstance.locationList[self.locationIndex]
@@ -149,20 +149,23 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
             UIView.animate(withDuration: 1, animations: {
                 self.temperatureLabel.layer.transform = CATransform3DMakeRotation(CGFloat(radians), 1, 0, 0);
             }, completion: { (true) in
-                let y = Double(round(10*self.temperature.currently.temperature)/10 )
                 if Global.sharedInstance.unit == "F"{
                     Global.sharedInstance.unit = "C"
                 }else{
                     Global.sharedInstance.unit = "F"
                 }
-                let min = Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 )
-                let height = Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 )
-                self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                let y = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.currently.temperature)/10 ))
                 self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
                 UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
                     self.temperatureLabel.layer.transform = CATransform3DMakeRotation(0, 1, 0, 0);
-                }, completion: nil)
+                }, completion: { (true) in
+                    let min = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 ))
+                    let height = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 ))
+                    self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                })
             })
+            
+            
         }
     }
     
@@ -213,7 +216,7 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                 }
                 return
             }
-            print(String(data: data, encoding: .utf8)!)
+            //print(String(data: data, encoding: .utf8)!)
             let currentlyObj : Currently
             let hourlyObj : Hourly
             let dailyObj : Daily
@@ -339,18 +342,23 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                 
                 DispatchQueue.main.async  {
                     self.updatedWhen.text = "Just Updated"
-                    let y = Double(round(10*self.temperature.currently.temperature)/10 )
-                    self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
                     self.activityIndicator.stopAnimating()
                     self.textStatus.text = self.temperature.currently.summary
-                    let min = Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 )
-                    let height = Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 )
+                    let y = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.currently.temperature)/10 ))
+                    let min = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 ))
+                    let height = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 ))
+                    self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
                     self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
                     var templist = [Double]()
+                    var templistMin = [Double]()
+                    var date = [Date]()
                     for i in 0...self.temperature.daily.data.count - 1 {
                         templist.append( self.temperature.daily.data[i].temperatureMax)
+                        templistMin.append( self.temperature.daily.data[i].temperatureLow)
+                        date .append(  Date(timeIntervalSince1970: self.temperature.daily.data[i].time))
                     }
-                    self.setChart(dataPoints:self.months, values: templist)
+                    
+                    self.setChart( values: templist,values2:templistMin,dateList : date)
                     var getIcon : Bool = false
                     if Global.sharedInstance.icon_list.contains(self.temperature.currently.icon){
                         self.showBack(show: 0)
@@ -369,6 +377,7 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                     if !getIcon {
                         self.showBack(show: 1)
                     }
+                    print(" time:\(self.temperature.currently.time)")
                 }
             } catch let error as NSError {
                 DispatchQueue.main.async  {
@@ -425,17 +434,52 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         task.resume()
     }
     
-    func setChart(dataPoints: [String], values: [Double]) {
+    func setChart(values: [Double],values2:[Double],dateList : [Date]) {
         var dataEntries: [ChartDataEntry] = []
-        
+        var dataEntries2: [ChartDataEntry] = []
         for i in 0..<values.count {
-            let dataEntry = ChartDataEntry(x: Double(i), y:values[i],data:dataPoints[i])
+            let dataEntry = ChartDataEntry(x: Double(i), y:Double(convertToCelsius(fahrenheit:values[i])))
             dataEntries.append(dataEntry)
+            
+            let dataEntry2 = ChartDataEntry(x: Double(i), y:Double(convertToCelsius(fahrenheit:values2[i])))
+            dataEntries2.append(dataEntry2)
         }
-        let chartDataSet = LineChartDataSet(entries: dataEntries, label: "Temperature Variation")
-        let chartData = LineChartData(dataSet: chartDataSet)
+        
+        
+        
+        let chartDataSet = LineChartDataSet(entries: dataEntries, label: "Max Temperature")
+        chartDataSet.colors = [UIColor.red]
+        let chartDataSet2 = LineChartDataSet(entries: dataEntries2, label: "Min Temperature")
+        chartDataSet2.colors = [UIColor.green]
+        
+        var dataSets : [LineChartDataSet] = [LineChartDataSet]()
+        dataSets.append(chartDataSet2)
+        dataSets.append(chartDataSet)
+        
+        let chartData = LineChartData(dataSets: dataSets)
+        self.barChartView.xAxis.labelPosition = XAxis.LabelPosition.bottom
+        self.barChartView.chartDescription?.text = "Temperature Variation in coming days (°" + Global.sharedInstance.unit + ")"
+        self.barChartView.xAxis.valueFormatter = DefaultAxisValueFormatter(block: {(index, _) in
+            return self.getDayOfWeek(date:dateList[Int(index)])
+        })
+        
         barChartView.data = chartData
-        barChartView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+        barChartView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+    }
+    func getDayOfWeek( date:Date) -> String {
+        let myCalendar = Calendar(identifier: .gregorian)
+        let weekDay = myCalendar.component(.day, from: date)
+        let month = myCalendar.component(.month, from: date)
+        return String(weekDay) + "/" + String(month)
+    }
+    
+    func convertToCelsius(fahrenheit: Double) -> Int {
+        if Global.sharedInstance.unit == "F"
+        {
+            return Int(fahrenheit)
+        }else{
+            return Int(5.0 / 9.0 * (Double(fahrenheit) - 32.0))
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
