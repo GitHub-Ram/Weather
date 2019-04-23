@@ -120,6 +120,10 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapFunction))
         self.temperatureLabel.addGestureRecognizer(tap)
         self.temperatureLabel.isUserInteractionEnabled = true
+         self.temperatureLabel.textColor = UIColor.white
+        self.temperatureLabel.layer.zPosition = 400;
+        self.textStatus.textColor = UIColor.white
+        self.tempRange.textColor = UIColor.white
         showBack(show:1)
     }
     
@@ -143,6 +147,20 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.temperatureLabel.isUserInteractionEnabled = true
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let min = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 ))
+            let height = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 ))
+            self.tempRange.attributedText = self.shadowText(showText: String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit)
+            var templist = [Double]()
+            var templistMin = [Double]()
+            var date = [Date]()
+            for i in 0...self.temperature.daily.data.count - 1 {
+                templist.append( self.temperature.daily.data[i].temperatureMax)
+                templistMin.append( self.temperature.daily.data[i].temperatureLow)
+                date .append(  Date(timeIntervalSince1970: self.temperature.daily.data[i].time))
+            }
+            self.setChart( values: templist,values2:templistMin,dateList : date)
+        }
         DispatchQueue.main.async  {
             self.temperatureLabel.isUserInteractionEnabled = false
             let radians = 90 * Double.pi / 180
@@ -155,13 +173,11 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                     Global.sharedInstance.unit = "F"
                 }
                 let y = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.currently.temperature)/10 ))
-                self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
+                self.temperatureLabel.attributedText = self.shadowText(showText:  String(y) + "°" + Global.sharedInstance.unit)
                 UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
                     self.temperatureLabel.layer.transform = CATransform3DMakeRotation(0, 1, 0, 0);
                 }, completion: { (true) in
-                    let min = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 ))
-                    let height = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 ))
-                    self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                    
                 })
             })
             
@@ -185,6 +201,17 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
     
     @IBAction func touchUpInside(_ sender: Any) {
         goToSearch()
+    }
+    
+    private func shadowText(showText:String)-> NSMutableAttributedString{
+        let mutableAttriStr = NSMutableAttributedString(string:showText)
+        let shadow = NSShadow()
+        shadow.shadowColor = UIColor.black;
+        shadow.shadowBlurRadius = 2.0;
+        shadow.shadowOffset = CGSize(width:1.0, height:1.0);
+        let range = NSMakeRange(0, mutableAttriStr.length)
+        mutableAttriStr.addAttribute(NSAttributedString.Key.shadow, value: shadow, range: range)
+        return mutableAttriStr
     }
     
     func searchDismissed(location: CLPlacemark) {
@@ -343,12 +370,12 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
                 DispatchQueue.main.async  {
                     self.updatedWhen.text = "Just Updated"
                     self.activityIndicator.stopAnimating()
-                    self.textStatus.text = self.temperature.currently.summary
+                    self.textStatus.attributedText = self.shadowText(showText: self.temperature.currently.summary)
                     let y = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.currently.temperature)/10 ))
                     let min = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureMin)/10 ))
                     let height = self.convertToCelsius(fahrenheit: Double(round(10*self.temperature.daily.data[0].temperatureHigh)/10 ))
-                    self.temperatureLabel.text = String(y) + "°" + Global.sharedInstance.unit
-                    self.tempRange.text = String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit
+                    self.temperatureLabel.attributedText = self.shadowText(showText: String(y) + "°" + Global.sharedInstance.unit)
+                    self.tempRange.attributedText = self.shadowText(showText: String(min) + "°" + Global.sharedInstance.unit + " / " + String(height) + "°" + Global.sharedInstance.unit)
                     var templist = [Double]()
                     var templistMin = [Double]()
                     var date = [Date]()

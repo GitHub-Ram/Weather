@@ -108,7 +108,7 @@ class  SearchViewController: UIViewController, UITableViewDataSource,UITableView
         geocoder.geocodeAddressString(partText) { (placemarks, error) in
             if error == nil {
                 if let placemark = placemarks?[0] {
-                    let addString = String(placemark.name!) + ", " + String(placemark.administrativeArea!) + ", " + String(placemark.country!)
+                    let addString = String(placemark.name != nil ? placemark.name! : "") + ", " + String(placemark.administrativeArea != nil ? placemark.administrativeArea! : "") + ", " + String(placemark.country != nil ? placemark.country! : "")
                     if self.placeMark.contains(addString){
                         DispatchQueue.main.async {
                             self.activityIndicator.stopAnimating()
@@ -123,6 +123,8 @@ class  SearchViewController: UIViewController, UITableViewDataSource,UITableView
                     }
                     if self.placeMark.count > 0{
                         DispatchQueue.main.async {
+                            self.placeMarker.reverse()
+                            self.placeMark.reverse()
                             self.tableView.reloadData()
                             self.activityIndicator.stopAnimating()
                         }
