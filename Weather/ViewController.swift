@@ -499,7 +499,7 @@ class ViewController: UIViewController,SearchViewControllerDelegate {
         })
         
         barChartView.data = chartData
-        barChartView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        barChartView.backgroundColor = UIColor.white.withAlphaComponent(0.65)
     }
     func getDayOfWeek( date:Date) -> String {
         let myCalendar = Calendar(identifier: .gregorian)
